@@ -8,15 +8,18 @@ interface BlogPageProps {
 export const revalidate = 600;
 
 // for SSG (ISR when used with revalidate)
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const posts: Post[] = await fetch("http://localhost:3000/api/content", {
-    cache: "default",
-  }).then((res) => res.json());
 
-  return posts.map((post) => ({ slug: post.slug }));
-}
+/*export async function generateStaticParams() {
+  const posts: Post[] = await fetch("http://localhost:3000/api/content").then(
+    (res) => res.json()
+  );
 
-export async function BlogPage({ params }: BlogPageProps) {
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}*/
+
+const BlogPage = async ({ params }: BlogPageProps) => {
   const posts: Post[] = await fetch("http://localhost:3000/api/content", {
     cache: "default",
   }).then((res) => res.json());
@@ -31,6 +34,6 @@ export async function BlogPage({ params }: BlogPageProps) {
       <p>{post.content}</p>
     </div>
   );
-}
+};
 
 export default BlogPage;
