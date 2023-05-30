@@ -1,14 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Only needed when using a cloud provider that doesn't support the creation of new databases, like Heroku. Learn more: https://pris.ly/d/migrate-shadow
+}
+
+generator client {
+  provider        = "prisma-client-js"
 }
 
 model Account {
@@ -20,7 +17,6 @@ model Account {
   refresh_token      String?  @db.Text
   access_token       String?  @db.Text
   expires_at         Int?
-  refresh_token_expires_in Int?
   token_type         String?
   scope              String?
   id_token           String?  @db.Text
@@ -42,8 +38,6 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   name          String?
-  bio           String? @db.Text
-  age           Int?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
