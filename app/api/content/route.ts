@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Post } from "@/app/interfaces/post";
+import { Post } from "@/interfaces/post";
 import { getServerSession } from "next-auth";
 
 const posts: Post[] = [

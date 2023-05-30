@@ -1,5 +1,6 @@
 import "server-only";
-import { Post } from "@/app/interfaces/post";
+import { Post } from "@/interfaces/post";
+import PostCard from "@/components/cards/PostCard";
 
 interface BlogPageProps {
   params: { slug: string };
@@ -19,7 +20,7 @@ export async function generateStaticParams() {
   }));
 }
 
-const BlogPage = async ({ params }: BlogPageProps) => {
+const BlogSlugPage = async ({ params }: BlogPageProps) => {
   const posts: Post[] = await fetch(
     "https://next13-myspace-mircosteyer.vercel.app/api/content",
     {
@@ -31,12 +32,7 @@ const BlogPage = async ({ params }: BlogPageProps) => {
 
   if (!post) return <div>Blog entry {params.slug} does not exist.</div>;
 
-  return (
-    <div>
-      <h1>{post.title}</h1>
-      <p>{post.content}</p>
-    </div>
-  );
+  return <PostCard {...post} />;
 };
 
-export default BlogPage;
+export default BlogSlugPage;
