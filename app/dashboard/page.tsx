@@ -8,13 +8,10 @@ import ProfileForm from "@/app/dashboard/ProfileForm";
 const DashboardPage = async () => {
   const session = await getServerSession(authOptions);
 
-  console.log("SESSION", session);
-
   if (session === null) {
     redirect("/api/auth/signin");
   }
 
-  console.log("EMAIL", session.user?.email);
   if (!session.user?.email) return <div></div>;
 
   const user = await prisma.user.findUnique({
