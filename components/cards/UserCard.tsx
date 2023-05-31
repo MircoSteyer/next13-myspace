@@ -1,5 +1,6 @@
 import "server-only";
 import Link from "next/link";
+import FollowButton from "@/components/buttons/Follow";
 
 interface UserCardProps {
   id: string;
@@ -16,6 +17,9 @@ const UserCard = ({ id, name, age, image }: UserCardProps) => {
           <Link href={`/users/${id}`}>{name}</Link>
         </h3>
         <p>Age: {age}</p>
+
+        {/* @ts-expect-error Server Component */}
+        <FollowButton targetUserId={id} />
       </div>
     </div>
   );
