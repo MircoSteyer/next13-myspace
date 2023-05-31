@@ -27,16 +27,7 @@ export const authOptions: NextAuthOptions = {
       });
       const emails: GithubEmail[] = await res.json();
 
-      const email = emails.find((mail) => mail.primary)?.email;
-
-      await prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          email,
-        },
-      });
+      user.email = emails.find((mail) => mail.primary)?.email;
 
       return true;
     },
