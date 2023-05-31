@@ -3,15 +3,44 @@ import Github from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 
-const authOptions: NextAuthOptions = {
+interface GithubEmail {
+  email: string;
+  primary: boolean;
+  verified: boolean;
+  visibility: string | null;
+}
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
-  debug: true,
   providers: [
     Github({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
     }),
   ],
+  callbacks: {
+    signIn: async ({ account, user }): Promise<boolean> => {
+      const res = await fetch("https://api.github.com/user/public_emails", {
+        headers: {
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${account?.access_token}`,
+        },
+      });
+      const emails: GithubEmail[] = await res.json();
+
+      const email = emails.find((mail) => mail.primary)?.email;
+
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          email,
+        },
+      });
+
+      return true;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

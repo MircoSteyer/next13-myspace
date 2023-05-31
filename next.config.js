@@ -8,6 +8,10 @@ const nextConfig = {
         port: "",
         pathname: "/u/**",
       },
+      {
+        protocol: "https",
+        hostname: "t4.ftcdn.net",
+      },
     ],
   },
 };
